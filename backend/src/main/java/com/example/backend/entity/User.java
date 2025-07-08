@@ -11,7 +11,7 @@ public class User {
 
     private String name;
 
-    private String mail;
+    private String email;
 
     // getter, setter
     public Long getId() {
@@ -30,11 +30,10 @@ public class User {
         this.name = name;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
-
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
