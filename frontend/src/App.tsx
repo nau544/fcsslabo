@@ -9,7 +9,7 @@ import Search from './components/Search';
 const App: React.FC = () => {
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const [showGrid, setShowGrid] = React.useState(false);
-    pp
+    
 
     React.useEffect(() => {
         if (isDarkMode) {
