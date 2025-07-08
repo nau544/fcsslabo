@@ -1,46 +1,27 @@
+version: '3.8'
 services:
-  # PostgreSQLデータベースを追加
-  postgres:
+  db:
     image: postgres:15
-    container_name: postgres-db
+    container_name: postgres_db
     environment:
-      POSTGRES_DB: myapp
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+      POSTGRES_DB: mydb
     ports:
-      - "5433:5432"
+      - "5432:5432"  # ホストの5432→コンテナの5432
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
 
-  backend:
-    build: ./backend
-    container_name: springboot-app
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./backend/src:/app/src
-      - ./backend/pom.xml:/app/pom.xml
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/myapp
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=password
-    depends_on:
-      - postgres
-
-  frontend:
-    build: ./frontend
-    container_name: react-app
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: adminpass
     ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-      - REACT_APP_API_URL=http://localhost:8080
+      - "8080:80"  # ホストの8080→コンテナの80
     depends_on:
-      - backend
+      - db
 
 volumes:
-  postgres_data:
+  db_data:
