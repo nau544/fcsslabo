@@ -22,9 +22,23 @@ const App: React.FC = () => {
         }
     }, [isDarkMode]);
 
-    // 追加ボタンのクリック処理
-    const handleAddClick = () => {
-        alert("追加ボタンがクリックされました！");
+    // ユーザー追加API
+    const handleUserAdd = async (user: { name: string; email: string }) => {
+        try {
+            const res = await fetch("http://localhost:8081/api/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(user),
+            });
+            if (res.ok) {
+                alert("ユーザーを追加しました！");
+                // 必要なら一覧の再取得など
+            } else {
+                alert("追加に失敗しました");
+            }
+        } catch (err) {
+            alert("通信エラー");
+        }
     };
 
     return (
@@ -39,7 +53,7 @@ const App: React.FC = () => {
             {/* ここで赤い帯の下、左端に追加ボタンを配置 */}
             <div style={{ display: "flex", alignItems: "flex-start" }}>
                 <div style={{ margin: "24px 0 0 24px" }}>
-                    <AddButton onClick={handleAddClick} />
+                    <AddButton onUserAdd={handleUserAdd} />
                 </div>
                 {/* 右側に既存の検索やコンテンツ */}
                 <div style={{ flex: 1 }}>
