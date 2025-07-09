@@ -42,4 +42,13 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    // createdAtのgetter/setterを追加
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

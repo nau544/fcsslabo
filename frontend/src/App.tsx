@@ -10,6 +10,7 @@ import AddButton from "./components/AddButton";
 const App: React.FC = () => {
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const [showGrid, setShowGrid] = React.useState(false);
+    const [refreshKey, setRefreshKey] = React.useState(0); // 一覧更新用のキー
     
 
     React.useEffect(() => {
@@ -32,7 +33,8 @@ const App: React.FC = () => {
             });
             if (res.ok) {
                 alert("ユーザーを追加しました！");
-                // 必要なら一覧の再取得など
+                // 一覧を更新するためにキーを変更
+                setRefreshKey(prev => prev + 1);
             } else {
                 alert("追加に失敗しました");
             }
@@ -61,7 +63,7 @@ const App: React.FC = () => {
                         <Search onSearch={() => setShowGrid(true)} />
                     </div>
                     <div className="content">
-                        {showGrid && <UserManager isDarkMode={isDarkMode} />}
+                        {showGrid && <UserManager key={refreshKey} isDarkMode={isDarkMode} />}
                         <SearchHistoryManager />
                     </div>
                 </div>

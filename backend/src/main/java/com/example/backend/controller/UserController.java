@@ -5,6 +5,7 @@ import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -24,6 +25,8 @@ public class UserController {
     // ユーザー追加
     @PostMapping
     public User createUser(@RequestBody User user) {
+        // 作成日時を自動設定
+        user.setCreatedAt(LocalDateTime.now());
         return userRepository.save(user);
     }
 }
