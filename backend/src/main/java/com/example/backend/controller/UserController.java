@@ -16,10 +16,16 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    // ユーザー一覧取得
+    // ユーザー一覧取得（検索機能付き）
     @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<User> getUsers(@RequestParam(required = false) String keyword) {
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            // キーワードが指定されている場合は検索
+            return userRepository.findByNameContainingIgnoreCase(keyword.trim());
+        } else {
+            // キーワードが指定されていない場合は全件取得
+            return userRepository.findAll();
+        }
     }
 
     // ユーザー追加
