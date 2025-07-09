@@ -21,7 +21,7 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
             await saveSearchHistory(keyword);
 
             // 2. 実際の検索処理（既存のロジック）
-            const res = await fetch(`http://localhost:8080/api/search?keyword=${keyword}`);
+            const res = await fetch(`http://localhost:8081/api/search?keyword=${keyword}`);
             const data = await res.json();
             setResults(data);
         } catch (error) {
@@ -41,7 +41,7 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
 
     // 検索キーワードを保存するAPI呼び出し関数
     const saveSearchHistory = async (keyword: string) => {
-        await fetch('http://localhost:8080/api/search-history', {
+        await fetch('http://localhost:8081/ap1arch-history', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(keyword),

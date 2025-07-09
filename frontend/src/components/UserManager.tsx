@@ -30,7 +30,7 @@ const UserManager: React.FC<UserManagerProps> = ({ isDarkMode }) => {
     // ユーザー一覧取得
     const fetchUsers = async () => {
         try {
-            const res = await fetch("http://localhost:8080/api/users");
+            const res = await fetch("http://localhost:8081/api/users");
             if (res.ok) {
                 const data = await res.json();
                 setUsers(data);
@@ -55,7 +55,7 @@ const UserManager: React.FC<UserManagerProps> = ({ isDarkMode }) => {
         setMessage("");
 
         try {
-            const res = await fetch("http://localhost:8080/api/users", {
+            const res = await fetch("http://localhost:8081/api/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, mailaddress }),

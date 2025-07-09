@@ -12,7 +12,7 @@ const SearchHistoryList: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("http://localhost:8082/api/search-history")
+        fetch("http://localhost:8081/api/search-history")
             .then((res) => res.json())
             .then((json: SearchHistory[]) => setData(json))
             .catch((err) => alert("取得エラー: " + err))

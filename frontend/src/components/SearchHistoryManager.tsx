@@ -17,7 +17,7 @@ const SearchHistoryManager: React.FC = () => {
         e.preventDefault();
         setMessage("");
         try {
-            const res = await fetch("http://localhost:8082/api/search-history", {
+            const res = await fetch("http://localhost:8081/api/search-history", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ keyword }),
@@ -39,8 +39,8 @@ const SearchHistoryManager: React.FC = () => {
         try {
             const url =
                 search.trim() === ""
-                    ? "http://localhost:8082/api/search-history"
-                    : `http://localhost:8082/api/search-history?keyword=${encodeURIComponent(
+                    ? "http://localhost:8081/api/search-history"
+                    : `http://localhost:8081/api/search-history?keyword=${encodeURIComponent(
                         search
                     )}`;
             const res = await fetch(url);
