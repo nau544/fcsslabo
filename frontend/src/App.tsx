@@ -6,12 +6,20 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import IconButton from '@mui/material/IconButton';
 import Search from './components/Search';
 import AddButton from "./components/AddButton";
+import Grid from './components/Grid';
+
+// 検索結果の型定義
+type SearchResult = {
+    id: number;
+    name: string;
+    email: string;
+};
 
 const App: React.FC = () => {
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const [showGrid, setShowGrid] = React.useState(false);
-    const [refreshKey, setRefreshKey] = React.useState(0); // 一覧更新用のキー
-    
+    const [refreshKey, setRefreshKey] = React.useState(0);
+    const [searchResults, setSearchResults] = React.useState<SearchResult[]>([]); // 検索結果を管理
 
     React.useEffect(() => {
         if (isDarkMode) {
@@ -33,7 +41,6 @@ const App: React.FC = () => {
             });
             if (res.ok) {
                 alert("ユーザーを追加しました！");
-                // 一覧を更新するためにキーを変更
                 setRefreshKey(prev => prev + 1);
             } else {
                 alert("追加に失敗しました");
@@ -42,6 +49,19 @@ const App: React.FC = () => {
             alert("通信エラー");
         }
     };
+
+    // 検索結果を受け取る関数
+    const handleSearch = (results: SearchResult[]) => {
+        setSearchResults(results);
+        setShowGrid(true);
+    };
+
+    // Grid用データに変換
+    const gridData = searchResults.map(result => ({
+        id: result.id,
+        name: result.name,
+        value: result.email
+    }));
 
     return (
         <div className={`App${isDarkMode ? ' dark' : ''}`}>
@@ -52,18 +72,38 @@ const App: React.FC = () => {
                 </IconButton>
             </div>
 
-            {/* ここで赤い帯の下、左端に追加ボタンを配置 */}
             <div style={{ display: "flex", alignItems: "flex-start" }}>
                 <div style={{ margin: "24px 0 0 24px" }}>
                     <AddButton onUserAdd={handleUserAdd} />
                 </div>
-                {/* 右側に既存の検索やコンテンツ */}
                 <div style={{ flex: 1 }}>
                     <div style={{ margin: '24px 0', display: 'flex', justifyContent: 'center' }}>
-                        <Search onSearch={() => setShowGrid(true)} />
+                        <Search onSearch={handleSearch} />
                     </div>
                     <div className="content">
-                        {showGrid && <UserManager key={refreshKey} isDarkMode={isDarkMode} />}
+                        {/* 検索結果がある場合はGridを表示、ない場合はUserManagerを表示 */}
+                        {showGrid && searchResults.length > 0 ? (
+                            <div className="container">
+                                <div className="box">
+                                    <div className="header">
+                                        <h2>検索結果</h2>
+                                        <p>検索結果: {searchResults.length}件</p>
+                                    </div>
+                                    <Grid data={gridData} isDarkMode={isDarkMode} />
+                                </div>
+                            </div>
+                        ) : showGrid ? (
+                            <div className="container">
+                                <div className="box">
+                                    <div className="header">
+                                        <h2>検索結果</h2>
+                                        <p>該当するユーザーが見つかりませんでした</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <UserManager key={refreshKey} isDarkMode={isDarkMode} />
+                        )}
                         <SearchHistoryManager />
                     </div>
                 </div>

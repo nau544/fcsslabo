@@ -1,59 +1,62 @@
 import React, { useState } from 'react';
 
-type Result = {
+// 検索結果の型定義
+type SearchResult = {
     id: number;
     name: string;
-    details: string;
+    email: string;
 };
 
 type SearchProps = {
-    onSearch: (query: string) => void;
+    onSearch: (results: SearchResult[]) => void; // 検索結果を親に渡す
 };
 
 const Search: React.FC<SearchProps> = ({ onSearch }) => {
     const [keyword, setKeyword] = useState('');
-    const [results, setResults] = useState<Result[]>([]);
 
+    // 検索処理を実行する関数
     const handleSearch = async () => {
-        if (!keyword) return;
         try {
-            // 1. 検索履歴を保存
-            await saveSearchHistory(keyword);
-
-            // 2. 実際の検索処理（既存のロジック）
-            const res = await fetch(`http://localhost:8081/api/search?keyword=${keyword}`);
-            const data = await res.json();
-            setResults(data);
+            let url = 'http://localhost:8081/api/users';
+            
+            // キーワードが入力されている場合は検索APIを呼び出し
+            if (keyword.trim()) {
+                url += `?keyword=${encodeURIComponent(keyword.trim())}`;
+            }
+            
+            const res = await fetch(url);
+            if (res.ok) {
+                const data = await res.json();
+                onSearch(data); // 検索結果を親コンポーネントに渡す
+            } else {
+                console.error('検索に失敗しました:', res.status);
+            }
         } catch (error) {
             console.error('検索に失敗しました:', error);
         }
     };
 
-    const handleClear = () => {
-        setKeyword('');
-        setResults([]);
-    };
-
+    // フォーム送信時の処理
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSearch(keyword);
+        handleSearch();
     };
 
-    // 検索キーワードを保存するAPI呼び出し関数
-    const saveSearchHistory = async (keyword: string) => {
-        await fetch('http://localhost:8081/ap1arch-history', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(keyword),
-        });
+    // クリアボタンの処理
+    const handleClear = () => {
+        setKeyword('');
+        // 空欄の場合は全件取得
+        handleSearch();
     };
 
+    // 入力値変更時の処理
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setKeyword(e.target.value);
     };
 
-    const handleSearchClick = async () => {
-        await handleSearch();
+    // 検索ボタンクリック時の処理
+    const handleSearchClick = () => {
+        handleSearch();
     };
 
     return (
@@ -105,33 +108,9 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
             >
                 × クリア
             </button>
-
-            {results.length > 0 && (
-                <table border={1} style={{ marginTop: '20px' }}>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>名前</th>
-                            <th>詳細</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {results.map((item) => (
-                            <tr key={item.id}>
-                                <td>{item.id}</td>
-                                <td>{item.name}</td>
-                                <td>{item.details}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
         </form>
     );
 };
 
 export default Search;
-
-// Search.tsx の最後に追加
-export { };
 
