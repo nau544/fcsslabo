@@ -24,12 +24,15 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
                 url += `?keyword=${encodeURIComponent(keyword.trim())}`;
             }
             
+            console.log('検索URL:', url); // デバッグ用
+            
             const res = await fetch(url);
             if (res.ok) {
                 const data = await res.json();
-                onSearch(data); // 検索結果を親コンポーネントに渡す
+                console.log('検索結果:', data); // デバッグ用
+                onSearch(data);
             } else {
-                console.error('検索に失敗しました:', res.status);
+                console.error('検索に失敗しました:', res.status, res.statusText);
             }
         } catch (error) {
             console.error('検索に失敗しました:', error);
@@ -65,7 +68,7 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
                 type="text"
                 value={keyword}
                 onChange={handleInputChange}
-                placeholder="キーワードを入力"
+                placeholder="ID、名前、またはメールアドレスで検索"
                 style={{
                     width: '400px',
                     height: '40px',

@@ -20,8 +20,8 @@ public class UserController {
     @GetMapping
     public List<User> getUsers(@RequestParam(required = false) String keyword) {
         if (keyword != null && !keyword.trim().isEmpty()) {
-            // キーワードが指定されている場合は検索
-            return userRepository.findByNameContainingIgnoreCase(keyword.trim());
+            // キーワードが指定されている場合は名前、メールアドレス、IDの全てで検索
+            return userRepository.findByNameOrEmailOrIdContainingIgnoreCase(keyword.trim());
         } else {
             // キーワードが指定されていない場合は全件取得
             return userRepository.findAll();
