@@ -46,7 +46,7 @@ const AddButton: React.FC<AddButtonProps> = ({ onUserAdd }) => {
     <>
       <button
         style={{
-          backgroundColor: "#d32f2f",
+          backgroundColor: "#b71c1c",
           color: "white",
           border: "none",
           borderRadius: "4px",
