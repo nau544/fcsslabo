@@ -77,6 +77,20 @@ const App: React.FC = () => {
 
     // 編集内容保存
     const handleEditSave = async () => {
+        if (!editName.trim()) {
+            alert("名前は必須です");
+            return;
+        }
+        if (!editValue.trim()) {
+            alert("メールアドレスは必須です");
+            return;
+        }
+        // メールアドレス形式チェック
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editValue)) {
+            alert("メールアドレスの形式が正しくありません");
+            return;
+        }
+
         if (!editTarget) return;
 
         try {
