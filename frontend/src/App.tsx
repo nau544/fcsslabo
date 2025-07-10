@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import UserManager from "./components/UserManager";
 import SearchHistoryManager from "./components/SearchHistoryManager";
 import "./App.css";
@@ -20,6 +20,11 @@ const App: React.FC = () => {
     const [showGrid, setShowGrid] = React.useState(false);
     const [refreshKey, setRefreshKey] = React.useState(0);
     const [searchResults, setSearchResults] = React.useState<SearchResult[]>([]); // 検索結果を管理
+
+    // 編集用state
+    const [editTarget, setEditTarget] = useState<{ id: number; name: string; value: string } | null>(null);
+    const [editName, setEditName] = useState("");
+    const [editValue, setEditValue] = useState("");
 
     React.useEffect(() => {
         if (isDarkMode) {
@@ -63,6 +68,20 @@ const App: React.FC = () => {
         value: result.email
     }));
 
+    // 編集ボタン押下時
+    const handleEdit = (row: { id: number; name: string; value: string }) => {
+        setEditTarget(row);
+        setEditName(row.name);
+        setEditValue(row.value);
+    };
+
+    // 編集内容保存
+    const handleEditSave = () => {
+        // ここでAPI呼び出しやstate更新を行う
+        // 例: setSearchResults(results => results.map(r => r.id === editTarget.id ? { ...r, name: editName, value: editValue } : r));
+        setEditTarget(null);
+    };
+
     return (
         <div className={`App${isDarkMode ? ' dark' : ''}`}>
             <div className="red-banner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -89,7 +108,11 @@ const App: React.FC = () => {
                                         <h2>検索結果</h2>
                                         <p>検索結果: {searchResults.length}件</p>
                                     </div>
-                                    <Grid data={gridData} isDarkMode={isDarkMode} />
+                                    <Grid
+                                        data={gridData}
+                                        isDarkMode={isDarkMode}
+                                        onEdit={handleEdit}
+                                    />
                                 </div>
                             </div>
                         ) : showGrid ? (
@@ -108,6 +131,43 @@ const App: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* 編集モーダル */}
+            {editTarget && (
+                <div style={{
+                    position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
+                    background: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000
+                }}>
+                    <div style={{
+                        background: "white", padding: "32px", borderRadius: "8px", width: "400px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.2)", display: "flex", flexDirection: "column"
+                    }}>
+                        <h2>編集</h2>
+                        <label>
+                            名前
+                            <input
+                                type="text"
+                                value={editName}
+                                onChange={e => setEditName(e.target.value)}
+                                style={{ width: "100%", margin: "8px 0", padding: "8px" }}
+                            />
+                        </label>
+                        <label>
+                            メールアドレス
+                            <input
+                                type="text"
+                                value={editValue}
+                                onChange={e => setEditValue(e.target.value)}
+                                style={{ width: "100%", margin: "8px 0", padding: "8px" }}
+                            />
+                        </label>
+                        <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "16px" }}>
+                            <button onClick={() => setEditTarget(null)} style={{ background: "lightgray", padding: "8px 16px" }}>キャンセル</button>
+                            <button onClick={handleEditSave} style={{ background: "#b71c1c", color: "white", padding: "8px 16px" }}>保存</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
