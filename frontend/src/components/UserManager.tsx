@@ -91,37 +91,25 @@ const UserManager: React.FC<UserManagerProps> = ({ isDarkMode }) => {
     }));
 
     return (
-        <div className="container">
-            <div className="box">
-                {/* ヘッダー */}
-                <div className="header">
-                    <h2>ユーザー管理</h2>
-                    <p>登録済みユーザー数: {users.length}件</p> {/* ユーザー数を表示 */}
-                </div>
-
-                {/* メッセージ表示 */}
-                {message && (
-                    <div className={`message ${messageType}`}>
-                        {message}
-                    </div>
-                )}
-
-                {/* ローディング表示 */}
-                {isLoading && (
-                    <div className="loading">
-                        処理中...
-                    </div>
-                )}
-
-                {/* ユーザー一覧 */}
-                {/* この部分を削除またはコメントアウト */}
-                {/* {users.length > 0 ? (
-                    <Grid data={gridData} isDarkMode={isDarkMode} />
-                ) : (
-                    <div style={{ textAlign: 'center', padding: '20px' }}>
-                        ユーザーが登録されていません
-                    </div>
-                )} */}
+        <div
+            style={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                zIndex: 3000,
+                background: isDarkMode ? "#222" : "white",
+                color: isDarkMode ? "#fff" : "#222",
+                padding: "32px 48px",
+                borderRadius: "12px",
+                boxShadow: "0 2px 16px rgba(0,0,0,0.15)",
+                textAlign: "center"
+            }}
+        >
+            <h2 style={{ margin: "0 0 16px 0" }}>ユーザー管理</h2>
+            <div style={{ marginBottom: "8px" }}>登録済みユーザー数: {users.length}件</div>
+            <div style={{ color: "red" }}>
+                ユーザー一覧の取得に失敗しました
             </div>
         </div>
     );

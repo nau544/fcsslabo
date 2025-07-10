@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Search from './components/Search';
 import AddButton from "./components/AddButton";
 import Grid from './components/Grid';
+import DownloadButton from "./components/DownloadButton";
 
 // 検索結果の型定義
 type SearchResult = {
@@ -152,6 +153,29 @@ const App: React.FC = () => {
         setEditTarget(null);
     };
 
+    // 例: searchResultsをCSVでダウンロード
+    const handleUserDownload = () => {
+        if (!searchResults || searchResults.length === 0) {
+            alert("ダウンロードできるユーザー情報がありません。");
+            return;
+        }
+        // CSV変換
+        const header = "ID,名前,メールアドレス\n";
+        const rows = searchResults.map(u => `${u.id},"${u.name}","${u.email}"`).join("\n");
+        const csv = header + rows;
+
+        // Blobでダウンロード
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "ユーザー情報.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+
     return (
         <div className={`App${isDarkMode ? ' dark' : ''}`}>
             <div className="red-banner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -162,8 +186,9 @@ const App: React.FC = () => {
             </div>
 
             <div style={{ display: "flex", alignItems: "flex-start" }}>
-                <div style={{ margin: "24px 0 0 24px" }}>
+                <div style={{ margin: "24px 0 0 24px", display: "flex", alignItems: "center", gap: "12px" }}>
                     <AddButton onUserAdd={handleUserAdd} isDarkMode={isDarkMode} />
+                    <DownloadButton onClick={handleUserDownload} label="ユーザー情報のダウンロード" />
                 </div>
                 <div style={{ flex: 1 }}>
                     <div style={{ margin: '24px 0', display: 'flex', justifyContent: 'center' }}>
