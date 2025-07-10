@@ -76,9 +76,36 @@ const App: React.FC = () => {
     };
 
     // 編集内容保存
-    const handleEditSave = () => {
-        // ここでAPI呼び出しやstate更新を行う
-        // 例: setSearchResults(results => results.map(r => r.id === editTarget.id ? { ...r, name: editName, value: editValue } : r));
+    const handleEditSave = async () => {
+        if (!editTarget) return;
+
+        try {
+            const res = await fetch(`http://localhost:8081/api/users/${editTarget.id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: editTarget.id,
+                    name: editName,
+                    email: editValue
+                }),
+            });
+
+            if (res.ok) {
+                // レスポンスのユーザー情報でstateを更新
+                const updatedUser = await res.json();
+                setSearchResults(results =>
+                    results.map(r =>
+                        r.id === updatedUser.id
+                            ? { ...r, name: updatedUser.name, email: updatedUser.email }
+                            : r
+                    )
+                );
+            } else {
+                alert("更新に失敗しました");
+            }
+        } catch (err) {
+            alert("通信エラー");
+        }
         setEditTarget(null);
     };
 

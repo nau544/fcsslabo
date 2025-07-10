@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,5 +35,19 @@ public class UserController {
         // 作成日時を自動設定
         user.setCreatedAt(LocalDateTime.now());
         return userRepository.save(user);
+    }
+
+    // ユーザー編集（更新）
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        return userRepository.findById(id)
+            .map(user -> {
+                user.setName(updatedUser.getName());
+                user.setEmail(updatedUser.getEmail());
+                // 必要に応じて他のフィールドも更新
+                User saved = userRepository.save(user);
+                return ResponseEntity.ok(saved);
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 }
