@@ -3,10 +3,11 @@ import React from 'react';
 type GridProps = {
     data: { id: number; name: string; value: string }[];
     isDarkMode: boolean;
-    onEdit?: (row: { id: number; name: string; value: string }) => void; // 追加
+    onEdit?: (row: { id: number; name: string; value: string }) => void;
+    onDelete?: (row: { id: number; name: string; value: string }) => void;
 };
 
-const Grid: React.FC<GridProps> = ({ data, isDarkMode, onEdit }) => (
+const Grid: React.FC<GridProps> = ({ data, isDarkMode, onEdit, onDelete }) => (
     <div
         style={{
             width: '70%',
@@ -34,10 +35,10 @@ const Grid: React.FC<GridProps> = ({ data, isDarkMode, onEdit }) => (
         }}>
             <thead>
                 <tr style={{ background: isDarkMode ? '#444' : '#f5f5f5' }}>
-                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>ID</th>
-                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>名前</th>
-                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>メールアドレス</th>
-                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>アクティブ</th> {/* 追加 */}
+                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px', width: '10%' }}>ID</th>
+                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px', width: '25%' }}>名前</th>
+                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px', width: '45%' }}>メールアドレス</th>
+                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px', width: '20%' }}>アクティブ</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,19 +54,36 @@ const Grid: React.FC<GridProps> = ({ data, isDarkMode, onEdit }) => (
                         <td style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>{row.name}</td>
                         <td style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>{row.value}</td>
                         <td style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>
-                            <button
-                                style={{
-                                    background: "#b71c1c",
-                                    color: "white",
-                                    border: "none",
-                                    borderRadius: "4px",
-                                    padding: "4px 12px",
-                                    cursor: "pointer"
-                                }}
-                                onClick={() => onEdit && onEdit(row)}
-                            >
-                                編集
-                            </button>
+                            <div style={{ display: 'flex', gap: '8px', justifyContent: 'space-between' }}>
+                                <button
+                                    style={{
+                                        background: "#b71c1c",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "4px",
+                                        padding: "4px 12px",
+                                        cursor: "pointer",
+                                        flex: 1
+                                    }}
+                                    onClick={() => onEdit && onEdit(row)}
+                                >
+                                    編集
+                                </button>
+                                <button
+                                    style={{
+                                        background: "#b71c1c",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "4px",
+                                        padding: "4px 12px",
+                                        cursor: "pointer",
+                                        flex: 1
+                                    }}
+                                    onClick={() => onDelete && onDelete(row)}
+                                >
+                                    削除
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 ))}
