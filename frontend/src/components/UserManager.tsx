@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Grid from "./Grid";
+import * as XLSX from 'xlsx'; // ← ここでインポート
+// import DownloadButton from "./DownloadButton"; // ← 削除
 
 // ユーザー型（DBの構造に合わせて修正）
 type User = {
@@ -91,26 +93,49 @@ const UserManager: React.FC<UserManagerProps> = ({ isDarkMode }) => {
     }));
 
     return (
-        <div
-            style={{
-                position: "fixed",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                zIndex: 3000,
-                background: isDarkMode ? "#222" : "white",
-                color: isDarkMode ? "#fff" : "#222",
-                padding: "32px 48px",
-                borderRadius: "12px",
-                boxShadow: "0 2px 16px rgba(0,0,0,0.15)",
-                textAlign: "center"
-            }}
-        >
-            <h2 style={{ margin: "0 0 16px 0" }}>ユーザー管理</h2>
-            <div style={{ marginBottom: "8px" }}>登録済みユーザー数: {users.length}件</div>
-            <div style={{ color: "red" }}>
-                ユーザー一覧の取得に失敗しました
-            </div>
+        <div>
+            {/* 他のUI... */}
+            <button
+                style={{
+                    backgroundColor: "#4CAF50",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    padding: "8px 16px",
+                    marginRight: "8px",
+                    cursor: "pointer",
+                    fontSize: "1rem"
+                }}
+                onClick={() => {
+                    if (!users || users.length === 0) {
+                        alert("ダウンロードするデータがありません");
+                        return;
+                    }
+                    try {
+                        const workbook = XLSX.utils.book_new();
+                        const worksheet = XLSX.utils.json_to_sheet(users);
+                        XLSX.utils.book_append_sheet(workbook, worksheet, "ユーザー情報");
+                        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+                        const blob = new Blob([excelBuffer], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                        });
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = "ユーザー情報.xlsx";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(url);
+                    } catch (error) {
+                        console.error("エクセルダウンロードエラー:", error);
+                        alert("エクセルファイルの生成に失敗しました: " + error);
+                    }
+                }}
+            >
+                ユーザー情報ダウンロード
+            </button>
+            {/* 他のUI... */}
         </div>
     );
 };

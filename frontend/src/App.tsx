@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Search from './components/Search';
 import AddButton from "./components/AddButton";
 import Grid from './components/Grid';
-import DownloadButton from "./components/DownloadButton";
+
 
 // 検索結果の型定義
 type SearchResult = {
@@ -188,7 +188,7 @@ const App: React.FC = () => {
             <div style={{ display: "flex", alignItems: "flex-start" }}>
                 <div style={{ margin: "24px 0 0 24px", display: "flex", alignItems: "center", gap: "12px" }}>
                     <AddButton onUserAdd={handleUserAdd} isDarkMode={isDarkMode} />
-                    <DownloadButton onClick={handleUserDownload} label="ユーザー情報のダウンロード" />
+                  
                 </div>
                 <div style={{ flex: 1 }}>
                     <div style={{ margin: '24px 0', display: 'flex', justifyContent: 'center' }}>
