@@ -7,6 +7,8 @@ type GridProps = {
     onDelete?: (row: { id: number; name: string; value: string }) => void;
     selectedUserIds: number[];
     onCheckboxChange: (userId: number) => void;
+    onCheckAll: () => void; // 追加
+    isAllChecked: boolean;  // 追加
 };
 
 const Grid: React.FC<GridProps> = ({
@@ -16,6 +18,8 @@ const Grid: React.FC<GridProps> = ({
     onDelete,
     selectedUserIds,
     onCheckboxChange,
+    onCheckAll, // 追加
+    isAllChecked, // 追加
 }) => {
     return (
         <table
@@ -32,7 +36,13 @@ const Grid: React.FC<GridProps> = ({
         >
             <thead>
                 <tr style={{ background: isDarkMode ? '#444' : '#f5f5f5' }}>
-                    <th style={{ width: '40px', padding: '8px' }}></th> {/* チェックボックス用: 固定幅 */}
+                    <th style={{ width: '40px', padding: '8px', textAlign: 'center' }}>
+                        <input
+                            type="checkbox"
+                            checked={isAllChecked}
+                            onChange={onCheckAll}
+                        />
+                    </th>
                     <th style={{ width: '10%', padding: '8px' }}>ID</th>
                     <th style={{ width: '25%', padding: '8px' }}>名前</th>
                     <th style={{ width: '35%', padding: '8px' }}>メールアドレス</th>

@@ -189,6 +189,18 @@ const App: React.FC = () => {
         URL.revokeObjectURL(url);
     };
 
+    // 全選択・全解除
+    const handleCheckAll = () => {
+      if (selectedUserIds.length === searchResults.length) {
+        setSelectedUserIds([]); // 全解除
+      } else {
+        setSelectedUserIds(searchResults.map(user => user.id)); // 全選択
+      }
+    };
+
+    // 全選択状態判定
+    const isAllChecked = searchResults.length > 0 && selectedUserIds.length === searchResults.length;
+
     return (
         <div className={`App${isDarkMode ? ' dark' : ''}`}>
             <div className="red-banner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -219,6 +231,8 @@ const App: React.FC = () => {
                                         onDelete={handleDelete}
                                         selectedUserIds={selectedUserIds}
                                         onCheckboxChange={handleCheckboxChange}
+                                        onCheckAll={handleCheckAll}         // 追加
+                                        isAllChecked={isAllChecked}         // 追加
                                     />
                                 </div>
                             </div>
