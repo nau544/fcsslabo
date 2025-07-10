@@ -95,46 +95,7 @@ const UserManager: React.FC<UserManagerProps> = ({ isDarkMode }) => {
     return (
         <div>
             {/* 他のUI... */}
-            <button
-                style={{
-                    backgroundColor: "#4CAF50",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "4px",
-                    padding: "8px 16px",
-                    marginRight: "8px",
-                    cursor: "pointer",
-                    fontSize: "1rem"
-                }}
-                onClick={() => {
-                    if (!users || users.length === 0) {
-                        alert("ダウンロードするデータがありません");
-                        return;
-                    }
-                    try {
-                        const workbook = XLSX.utils.book_new();
-                        const worksheet = XLSX.utils.json_to_sheet(users);
-                        XLSX.utils.book_append_sheet(workbook, worksheet, "ユーザー情報");
-                        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-                        const blob = new Blob([excelBuffer], {
-                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                        });
-                        const url = window.URL.createObjectURL(blob);
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.download = "ユーザー情報.xlsx";
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        window.URL.revokeObjectURL(url);
-                    } catch (error) {
-                        console.error("エクセルダウンロードエラー:", error);
-                        alert("エクセルファイルの生成に失敗しました: " + error);
-                    }
-                }}
-            >
-                ユーザー情報ダウンロード
-            </button>
+            {/* ここにあったダウンロードボタンを削除 */}
             {/* 他のUI... */}
         </div>
     );
