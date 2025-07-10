@@ -61,6 +61,7 @@ const App: React.FC = () => {
             if (res.ok) {
                 alert("ユーザーを追加しました！");
                 setRefreshKey(prev => prev + 1);
+                await fetchAllUsers(); // ★追加：ユーザー追加後にグリッドを即時更新
             } else {
                 alert("追加に失敗しました");
             }
@@ -200,6 +201,21 @@ const App: React.FC = () => {
 
     // 全選択状態判定
     const isAllChecked = searchResults.length > 0 && selectedUserIds.length === searchResults.length;
+
+    const fetchAllUsers = async () => {
+      try {
+        const res = await fetch("http://localhost:8081/api/users");
+        if (res.ok) {
+          const users = await res.json();
+          // ID順にソート
+          const sorted = users.sort((a: any, b: any) => a.id - b.id);
+          setSearchResults(sorted);
+          setShowGrid(true);
+        }
+      } catch (err) {
+        alert("ユーザー一覧の取得に失敗しました");
+      }
+    };
 
     return (
         <div className={`App${isDarkMode ? ' dark' : ''}`}>
