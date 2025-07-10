@@ -9,9 +9,10 @@ type SearchResult = {
 
 type SearchProps = {
     onSearch: (results: SearchResult[]) => void; // 検索結果を親に渡す
+    isDarkMode?: boolean; // ダークモード用プロパティを追加
 };
 
-const Search: React.FC<SearchProps> = ({ onSearch }) => {
+const Search: React.FC<SearchProps> = ({ onSearch, isDarkMode = false }) => {
     const [keyword, setKeyword] = useState('');
 
     // 検索処理を実行する関数
@@ -73,10 +74,13 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
                     width: '400px',
                     height: '40px',
                     fontSize: '1.2rem',
-                    border: '1px solid #ccc',
+                    border: isDarkMode ? '1px solid #555' : '1px solid #ccc',
                     borderRadius: '4px 0 0 4px',
                     outline: 'none',
-                    boxSizing: 'border-box'
+                    boxSizing: 'border-box',
+                    background: isDarkMode ? '#444' : '#fff',
+                    color: isDarkMode ? '#fff' : '#222',
+                    padding: '0 12px'
                 }}
             />
             <button
@@ -99,12 +103,12 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
                 onClick={handleClear}
                 style={{
                     marginLeft: '10px',
-                    backgroundColor: 'lightgray',
-                    color: 'black',
+                    backgroundColor: isDarkMode ? '#555' : 'lightgray',
+                    color: isDarkMode ? '#fff' : '#222',
                     border: 'none',
                     height: '40px',
                     padding: '0 20px',
-                    borderRadius: '0 4px 4px 0',
+                    borderRadius: '4px',
                     fontSize: '1.2rem',
                     cursor: 'pointer'
                 }}

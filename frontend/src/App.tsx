@@ -57,11 +57,13 @@ const App: React.FC = () => {
 
     // 検索結果を受け取る関数
     const handleSearch = (results: SearchResult[]) => {
-        setSearchResults(results);
+        // ID順にソートしてから設定
+        const sortedResults = results.sort((a, b) => a.id - b.id);
+        setSearchResults(sortedResults);
         setShowGrid(true);
     };
 
-    // Grid用データに変換
+    // Grid用データに変換（ID順にソート済み）
     const gridData = searchResults.map(result => ({
         id: result.id,
         name: result.name,
@@ -73,6 +75,33 @@ const App: React.FC = () => {
         setEditTarget(row);
         setEditName(row.name);
         setEditValue(row.value);
+    };
+
+    // 削除ボタン押下時
+    const handleDelete = async (row: { id: number; name: string; value: string }) => {
+        // 削除確認ダイアログ
+        if (!confirm(`ユーザー「${row.name}」を削除しますか？`)) {
+            return;
+        }
+
+        try {
+            const res = await fetch(`http://localhost:8081/api/users/${row.id}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+            });
+
+            if (res.ok) {
+                // 削除成功時は検索結果から該当ユーザーを削除（ID順を維持）
+                setSearchResults(results =>
+                    results.filter(r => r.id !== row.id).sort((a, b) => a.id - b.id)
+                );
+                alert("ユーザーを削除しました！");
+            } else {
+                alert("削除に失敗しました");
+            }
+        } catch (err) {
+            alert("通信エラー");
+        }
     };
 
     // 編集内容保存
@@ -105,14 +134,14 @@ const App: React.FC = () => {
             });
 
             if (res.ok) {
-                // レスポンスのユーザー情報でstateを更新
+                // レスポンスのユーザー情報でstateを更新（ID順を維持）
                 const updatedUser = await res.json();
                 setSearchResults(results =>
                     results.map(r =>
                         r.id === updatedUser.id
                             ? { ...r, name: updatedUser.name, email: updatedUser.email }
                             : r
-                    )
+                    ).sort((a, b) => a.id - b.id)
                 );
             } else {
                 alert("更新に失敗しました");
@@ -134,11 +163,11 @@ const App: React.FC = () => {
 
             <div style={{ display: "flex", alignItems: "flex-start" }}>
                 <div style={{ margin: "24px 0 0 24px" }}>
-                    <AddButton onUserAdd={handleUserAdd} />
+                    <AddButton onUserAdd={handleUserAdd} isDarkMode={isDarkMode} />
                 </div>
                 <div style={{ flex: 1 }}>
                     <div style={{ margin: '24px 0', display: 'flex', justifyContent: 'center' }}>
-                        <Search onSearch={handleSearch} />
+                        <Search onSearch={handleSearch} isDarkMode={isDarkMode} />
                     </div>
                     <div className="content">
                         {/* 検索結果がある場合はGridを表示、ない場合はUserManagerを表示 */}
@@ -153,6 +182,7 @@ const App: React.FC = () => {
                                         data={gridData}
                                         isDarkMode={isDarkMode}
                                         onEdit={handleEdit}
+                                        onDelete={handleDelete}
                                     />
                                 </div>
                             </div>
@@ -180,31 +210,77 @@ const App: React.FC = () => {
                     background: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000
                 }}>
                     <div style={{
-                        background: "white", padding: "32px", borderRadius: "8px", width: "400px",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.2)", display: "flex", flexDirection: "column"
+                        background: isDarkMode ? "#333" : "white",
+                        color: isDarkMode ? "#fff" : "#222",
+                        padding: "32px", 
+                        borderRadius: "8px", 
+                        width: "600px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.2)", 
+                        display: "flex", 
+                        flexDirection: "column"
                     }}>
-                        <h2>編集</h2>
-                        <label>
+                        <h2 style={{ color: isDarkMode ? "#fff" : "#222" }}>編集</h2>
+                        <label style={{ color: isDarkMode ? "#fff" : "#222" }}>
                             名前
                             <input
                                 type="text"
                                 value={editName}
                                 onChange={e => setEditName(e.target.value)}
-                                style={{ width: "100%", margin: "8px 0", padding: "8px" }}
+                                style={{ 
+                                    width: "100%", 
+                                    margin: "8px 0", 
+                                    padding: "8px",
+                                    background: isDarkMode ? "#444" : "#fff",
+                                    color: isDarkMode ? "#fff" : "#222",
+                                    border: isDarkMode ? "1px solid #555" : "1px solid #ddd",
+                                    borderRadius: "4px"
+                                }}
                             />
                         </label>
-                        <label>
+                        <label style={{ color: isDarkMode ? "#fff" : "#222" }}>
                             メールアドレス
                             <input
                                 type="text"
                                 value={editValue}
                                 onChange={e => setEditValue(e.target.value)}
-                                style={{ width: "100%", margin: "8px 0", padding: "8px" }}
+                                style={{ 
+                                    width: "100%", 
+                                    margin: "8px 0", 
+                                    padding: "8px",
+                                    background: isDarkMode ? "#444" : "#fff",
+                                    color: isDarkMode ? "#fff" : "#222",
+                                    border: isDarkMode ? "1px solid #555" : "1px solid #ddd",
+                                    borderRadius: "4px"
+                                }}
                             />
                         </label>
                         <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "16px" }}>
-                            <button onClick={() => setEditTarget(null)} style={{ background: "lightgray", padding: "8px 16px" }}>キャンセル</button>
-                            <button onClick={handleEditSave} style={{ background: "#b71c1c", color: "white", padding: "8px 16px" }}>保存</button>
+                            <button 
+                                onClick={() => setEditTarget(null)} 
+                                style={{ 
+                                    background: isDarkMode ? "#555" : "lightgray", 
+                                    color: isDarkMode ? "#fff" : "#222",
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                キャンセル
+                            </button>
+                            <button 
+                                onClick={handleEditSave} 
+                                style={{ 
+                                    background: "#b71c1c", 
+                                    color: "white", 
+                                    padding: "8px 16px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                保存
+                            </button>
                         </div>
                     </div>
                 </div>

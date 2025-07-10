@@ -2,9 +2,10 @@ import React, { useState } from "react";
 
 type AddButtonProps = {
   onUserAdd?: (user: { name: string; email: string }) => void;
+  isDarkMode?: boolean; // ダークモード用プロパティを追加
 };
 
-const AddButton: React.FC<AddButtonProps> = ({ onUserAdd }) => {
+const AddButton: React.FC<AddButtonProps> = ({ onUserAdd, isDarkMode = false }) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -76,35 +77,65 @@ const AddButton: React.FC<AddButtonProps> = ({ onUserAdd }) => {
         >
           <div
             style={{
-              background: "white",
+              background: isDarkMode ? "#333" : "white",
+              color: isDarkMode ? "#fff" : "#222",
               padding: "32px",
               borderRadius: "8px",
-              width: "600px", // ← ここを追加・修正
+              width: "600px",
               boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
               display: "flex",
               flexDirection: "column",
               alignItems: "stretch"
             }}
           >
-            <h2 style={{ marginBottom: "16px" }}>ユーザー追加</h2>
-            <label style={{ marginBottom: "8px" }}>
+            <h2 style={{ 
+              marginBottom: "16px",
+              color: isDarkMode ? "#fff" : "#222"
+            }}>
+              ユーザー追加
+            </h2>
+            <label style={{ 
+              marginBottom: "8px",
+              color: isDarkMode ? "#fff" : "#222"
+            }}>
               ユーザー名
               <input
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                style={{ width: "100%", marginTop: "4px", marginBottom: "12px", padding: "8px" }}
-                placeholder="ユーザー名を入力してください" // ← ここを追加
+                style={{ 
+                  width: "100%", 
+                  marginTop: "4px", 
+                  marginBottom: "12px", 
+                  padding: "8px",
+                  background: isDarkMode ? "#444" : "#fff",
+                  color: isDarkMode ? "#fff" : "#222",
+                  border: isDarkMode ? "1px solid #555" : "1px solid #ddd",
+                  borderRadius: "4px"
+                }}
+                placeholder="ユーザー名を入力してください"
               />
             </label>
-            <label style={{ marginBottom: "16px" }}>
+            <label style={{ 
+              marginBottom: "16px",
+              color: isDarkMode ? "#fff" : "#222"
+            }}>
               メールアドレス
               <input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                style={{ width: "100%", marginTop: "4px", marginBottom: "12px", padding: "8px" }}
-                placeholder="メールアドレスを入力してください" // ← ここを追加
+                style={{ 
+                  width: "100%", 
+                  marginTop: "4px", 
+                  marginBottom: "12px", 
+                  padding: "8px",
+                  background: isDarkMode ? "#444" : "#fff",
+                  color: isDarkMode ? "#fff" : "#222",
+                  border: isDarkMode ? "1px solid #555" : "1px solid #ddd",
+                  borderRadius: "4px"
+                }}
+                placeholder="メールアドレスを入力してください"
               />
             </label>
             {/* エラーメッセージ表示 */}
@@ -115,8 +146,8 @@ const AddButton: React.FC<AddButtonProps> = ({ onUserAdd }) => {
               <button
                 onClick={handleClose}
                 style={{
-                  background: "lightgray",
-                  color: "black",
+                  background: isDarkMode ? "#555" : "lightgray",
+                  color: isDarkMode ? "#fff" : "#222",
                   border: "none",
                   borderRadius: "4px",
                   padding: "8px 16px",
