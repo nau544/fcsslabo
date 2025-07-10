@@ -3,9 +3,10 @@ import React from 'react';
 type GridProps = {
     data: { id: number; name: string; value: string }[];
     isDarkMode: boolean;
+    onEdit?: (row: { id: number; name: string; value: string }) => void; // 追加
 };
 
-const Grid: React.FC<GridProps> = ({ data, isDarkMode }) => (
+const Grid: React.FC<GridProps> = ({ data, isDarkMode, onEdit }) => (
     <div
         style={{
             width: '70%',
@@ -36,6 +37,7 @@ const Grid: React.FC<GridProps> = ({ data, isDarkMode }) => (
                     <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>ID</th>
                     <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>名前</th>
                     <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>メールアドレス</th>
+                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>アクティブ</th> {/* 追加 */}
                 </tr>
             </thead>
             <tbody>
@@ -50,6 +52,21 @@ const Grid: React.FC<GridProps> = ({ data, isDarkMode }) => (
                         <td style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>{row.id}</td>
                         <td style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>{row.name}</td>
                         <td style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>{row.value}</td>
+                        <td style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>
+                            <button
+                                style={{
+                                    background: "#b71c1c",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    padding: "4px 12px",
+                                    cursor: "pointer"
+                                }}
+                                onClick={() => onEdit && onEdit(row)}
+                            >
+                                編集
+                            </button>
+                        </td>
                     </tr>
                 ))}
             </tbody>

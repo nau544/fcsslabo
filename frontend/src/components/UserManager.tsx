@@ -114,13 +114,14 @@ const UserManager: React.FC<UserManagerProps> = ({ isDarkMode }) => {
                 )}
 
                 {/* ユーザー一覧 */}
-                {users.length > 0 ? (
+                {/* この部分を削除またはコメントアウト */}
+                {/* {users.length > 0 ? (
                     <Grid data={gridData} isDarkMode={isDarkMode} />
                 ) : (
                     <div style={{ textAlign: 'center', padding: '20px' }}>
                         ユーザーが登録されていません
                     </div>
-                )}
+                )} */}
             </div>
         </div>
     );
