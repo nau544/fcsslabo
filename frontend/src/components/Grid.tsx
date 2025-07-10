@@ -5,40 +5,38 @@ type GridProps = {
     isDarkMode: boolean;
     onEdit?: (row: { id: number; name: string; value: string }) => void;
     onDelete?: (row: { id: number; name: string; value: string }) => void;
+    selectedUserIds: number[];
+    onCheckboxChange: (userId: number) => void;
 };
 
-const Grid: React.FC<GridProps> = ({ data, isDarkMode, onEdit, onDelete }) => (
-    <div
-        style={{
-            width: '70%',
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            background: isDarkMode ? '#333' : '#fff',
-            padding: '20px 0',
-            margin: '0 auto',
-            borderRadius: '12px',
-            boxShadow: isDarkMode ? '0 4px 16px rgba(255,255,255,0.1)' : '0 4px 16px rgba(0,0,0,0.12)',
-            border: isDarkMode ? '1px solid #555' : '1px solid #ddd',
-            color: isDarkMode ? '#fff' : '#222',
-        }}
-    >
-        <table style={{
-            width: '100%',
-            borderCollapse: 'separate',
-            borderSpacing: 0,
-            borderRadius: '12px',
-            overflow: 'hidden',
-            background: isDarkMode ? '#333' : '#fff',
-            color: isDarkMode ? '#fff' : '#222'
-        }}>
+const Grid: React.FC<GridProps> = ({
+    data,
+    isDarkMode,
+    onEdit,
+    onDelete,
+    selectedUserIds,
+    onCheckboxChange,
+}) => {
+    return (
+        <table
+            style={{
+                width: '100%',
+                tableLayout: 'fixed', // 追加: 幅指定を安定させる
+                borderCollapse: 'separate',
+                borderSpacing: 0,
+                borderRadius: '12px',
+                overflow: 'hidden',
+                background: isDarkMode ? '#333' : '#fff',
+                color: isDarkMode ? '#fff' : '#222'
+            }}
+        >
             <thead>
                 <tr style={{ background: isDarkMode ? '#444' : '#f5f5f5' }}>
-                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px', width: '10%' }}>ID</th>
-                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px', width: '25%' }}>名前</th>
-                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px', width: '45%' }}>メールアドレス</th>
-                    <th style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px', width: '20%' }}>アクティブ</th>
+                    <th style={{ width: '40px', padding: '8px' }}></th> {/* チェックボックス用: 固定幅 */}
+                    <th style={{ width: '10%', padding: '8px' }}>ID</th>
+                    <th style={{ width: '25%', padding: '8px' }}>名前</th>
+                    <th style={{ width: '35%', padding: '8px' }}>メールアドレス</th>
+                    <th style={{ width: '20%', padding: '8px' }}>アクティブ</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,10 +48,17 @@ const Grid: React.FC<GridProps> = ({ data, isDarkMode, onEdit, onDelete }) => (
                             color: isDarkMode ? '#fff' : '#222'
                         }}
                     >
-                        <td style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>{row.id}</td>
-                        <td style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>{row.name}</td>
-                        <td style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>{row.value}</td>
-                        <td style={{ color: isDarkMode ? '#fff' : '#222', padding: '8px' }}>
+                        <td style={{ padding: '8px', textAlign: 'center' }}>
+                            <input
+                                type="checkbox"
+                                checked={selectedUserIds.includes(row.id)}
+                                onChange={() => onCheckboxChange(row.id)}
+                            />
+                        </td>
+                        <td style={{ padding: '8px' }}>{row.id}</td>
+                        <td style={{ padding: '8px' }}>{row.name}</td>
+                        <td style={{ padding: '8px' }}>{row.value}</td>
+                        <td style={{ padding: '8px' }}>
                             <div style={{ display: 'flex', gap: '8px', justifyContent: 'space-between' }}>
                                 <button
                                     style={{
@@ -89,7 +94,7 @@ const Grid: React.FC<GridProps> = ({ data, isDarkMode, onEdit, onDelete }) => (
                 ))}
             </tbody>
         </table>
-    </div>
-);
+    );
+};
 
 export default Grid;

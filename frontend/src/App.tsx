@@ -28,6 +28,18 @@ const App: React.FC = () => {
     const [editName, setEditName] = useState("");
     const [editValue, setEditValue] = useState("");
 
+    const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
+
+    const handleCheckboxChange = (userId: number) => {
+      setSelectedUserIds(prev =>
+        prev.includes(userId)
+          ? prev.filter(id => id !== userId)
+          : [...prev, userId]
+      );
+    };
+
+    const selectedUsers = searchResults.filter(user => selectedUserIds.includes(user.id));
+
     React.useEffect(() => {
         if (isDarkMode) {
             document.body.classList.add('dark');
@@ -189,7 +201,7 @@ const App: React.FC = () => {
             <div style={{ display: "flex", alignItems: "flex-start" }}>
                 <div style={{ margin: "24px 0 0 24px", display: "flex", alignItems: "center", gap: "12px" }}>
                     <AddButton onUserAdd={handleUserAdd} isDarkMode={isDarkMode} />
-                    <DownloadButton users={searchResults} />
+                    <DownloadButton users={selectedUsers} />
                 </div>
                 <div style={{ flex: 1 }}>
                     <div style={{ margin: '24px 0', display: 'flex', justifyContent: 'center' }}>
@@ -205,6 +217,8 @@ const App: React.FC = () => {
                                         isDarkMode={isDarkMode}
                                         onEdit={handleEdit}
                                         onDelete={handleDelete}
+                                        selectedUserIds={selectedUserIds}
+                                        onCheckboxChange={handleCheckboxChange}
                                     />
                                 </div>
                             </div>
