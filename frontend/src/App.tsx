@@ -180,7 +180,7 @@ const App: React.FC = () => {
     return (
         <div className={`App${isDarkMode ? ' dark' : ''}`}>
             <div className="red-banner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <h1 style={{ margin: 0 }}>契約書</h1>
+                <h1 style={{ margin: 0 }}>ユーザー情報関連ツール</h1>
                 <IconButton onClick={() => setIsDarkMode((prev) => !prev)}>
                     <DarkModeIcon />
                 </IconButton>
@@ -200,10 +200,6 @@ const App: React.FC = () => {
                         {showGrid && searchResults.length > 0 ? (
                             <div className="container">
                                 <div className="box">
-                                    <div className="header">
-                                        <h2>検索結果</h2>
-                                        <p>検索結果: {searchResults.length}件</p>
-                                    </div>
                                     <Grid
                                         data={gridData}
                                         isDarkMode={isDarkMode}
