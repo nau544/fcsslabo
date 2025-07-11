@@ -241,7 +241,12 @@ const App: React.FC = () => {
 
     return (
         <div className={`App${isDarkMode ? ' dark' : ''}`}>
-            <div className="red-banner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div className="red-banner" style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between',
+                borderRadius: '0' // 上の丸みを消して角にする
+            }}>
                 <h1 style={{ margin: 0 }}>ユーザー情報管理ツール</h1>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <IconButton onClick={handleDrawerOpen}>
