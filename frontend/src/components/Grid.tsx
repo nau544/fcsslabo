@@ -39,12 +39,19 @@ const Grid: React.FC<GridProps> = ({
             </table>
             {/* ボディ用テーブル（スクロール） */}
             <div style={{ maxHeight: 'calc(100vh - 250px)', overflowY: 'auto' }}>
-                <table style={{ width: '100%', tableLayout: 'fixed', borderCollapse: 'separate', borderSpacing: 0 }}>
+                <table
+                    className={`grid-table${isDarkMode ? " dark" : ""}`}
+                    style={{
+                        width: '100%',
+                        tableLayout: 'fixed',
+                        borderCollapse: 'separate',
+                        borderSpacing: 0,
+                    }}
+                >
                     <tbody>
                         {data.map((row, idx) => (
                             <tr key={row.id} style={{
                                 borderBottom: idx !== data.length - 1 ? `1px solid ${isDarkMode ? '#555' : '#eee'}` : 'none',
-                                background: isDarkMode ? '#333' : '#fff',
                                 color: isDarkMode ? '#fff' : '#222'
                             }}>
                                 <td style={{ width: '40px', padding: '8px', textAlign: 'center' }}>

@@ -96,3 +96,12 @@ html.dark {
 .content {
   padding-bottom: 200px;
 }
+
+/* 例: ダークモードと通常モード両対応 */
+.grid-table tbody tr:hover {
+  background: #ffe0e0;   /* 通常モード時のホバー色 */
+  transition: background 0.2s;
+}
+.grid-table.dark tbody tr:hover {
+  background: #444;      /* ダークモード時のホバー色 */
+}
