@@ -6,6 +6,15 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode'; // 太陽マークアイコンを追加
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert'; // 三点リーダーアイコンを追加
+import Drawer from '@mui/material/Drawer'; // ドロワーコンポーネントを追加
+import List from '@mui/material/List'; // リストコンポーネントを追加
+import ListItem from '@mui/material/ListItem'; // リストアイテムコンポーネントを追加
+import ListItemText from '@mui/material/ListItemText'; // リストアイテムテキストコンポーネントを追加
+import ListItemIcon from '@mui/material/ListItemIcon'; // リストアイテムアイコンコンポーネントを追加
+import SettingsIcon from '@mui/icons-material/Settings'; // 設定アイコン
+import InfoIcon from '@mui/icons-material/Info'; // 情報アイコン
+import HomeIcon from '@mui/icons-material/Home'; // ホームアイコンを追加
+import NotificationsIcon from '@mui/icons-material/Notifications'; // お知らせアイコンを追加
 import Search from './components/Search';
 import AddButton from "./components/AddButton";
 import Grid from './components/Grid';
@@ -21,6 +30,7 @@ type SearchResult = {
 
 const App: React.FC = () => {
     const [isDarkMode, setIsDarkMode] = React.useState(false);
+    const [drawerOpen, setDrawerOpen] = React.useState(false); // ドロワーの開閉状態を管理
     const [showGrid, setShowGrid] = React.useState(false);
     const [refreshKey, setRefreshKey] = React.useState(0);
     const [searchResults, setSearchResults] = React.useState<SearchResult[]>([]); // 検索結果を管理
@@ -219,12 +229,22 @@ const App: React.FC = () => {
       }
     };
 
+    // ドロワーを開く関数
+    const handleDrawerOpen = () => {
+        setDrawerOpen(true);
+    };
+
+    // ドロワーを閉じる関数
+    const handleDrawerClose = () => {
+        setDrawerOpen(false);
+    };
+
     return (
         <div className={`App${isDarkMode ? ' dark' : ''}`}>
             <div className="red-banner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <h1 style={{ margin: 0 }}>ユーザー情報関連ツール</h1>
+                <h1 style={{ margin: 0 }}>ユーザー情報管理ツール</h1>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <IconButton>
+                    <IconButton onClick={handleDrawerOpen}>
                         <MoreVertIcon />
                     </IconButton>
                     <IconButton onClick={() => setIsDarkMode((prev) => !prev)}>
@@ -232,6 +252,70 @@ const App: React.FC = () => {
                     </IconButton>
                 </div>
             </div>
+
+            {/* ドロワーメニュー */}
+            <Drawer
+                anchor="right"
+                open={drawerOpen}
+                onClose={handleDrawerClose}
+                PaperProps={{
+                    style: {
+                        width: '280px',
+                        background: isDarkMode ? '#333' : '#fff',
+                        color: isDarkMode ? '#fff' : '#222'
+                    }
+                }}
+            >
+                <div style={{ padding: '20px' }}>
+                    <h2 style={{ 
+                        margin: '0 0 20px 0',
+                        color: isDarkMode ? '#fff' : '#222',
+                        fontSize: '1.2rem'
+                    }}>
+                        メニュー
+                    </h2>
+                    <List>
+                        <ListItem button onClick={() => {
+                            // ホーム画面に戻る処理
+                            setShowGrid(false);
+                            setSearchResults([]);
+                            handleDrawerClose();
+                        }}>
+                            <ListItemIcon>
+                                <HomeIcon style={{ color: isDarkMode ? '#fff' : '#222' }} />
+                            </ListItemIcon>
+                            <ListItemText primary="ホーム" />
+                        </ListItem>
+                        <ListItem button onClick={() => {
+                            alert('お知らせ機能は開発中です');
+                            handleDrawerClose();
+                        }}>
+                            <ListItemIcon>
+                                <NotificationsIcon style={{ color: isDarkMode ? '#fff' : '#222' }} />
+                            </ListItemIcon>
+                            <ListItemText primary="お知らせ" />
+                        </ListItem>
+                        <ListItem button onClick={() => {
+                            alert('設定機能は開発中です');
+                            handleDrawerClose();
+                        }}>
+                            <ListItemIcon>
+                                <SettingsIcon style={{ color: isDarkMode ? '#fff' : '#222' }} />
+                            </ListItemIcon>
+                            <ListItemText primary="設定" />
+                        </ListItem>
+                        <ListItem button onClick={() => {
+                            alert('このアプリはユーザー情報管理ツールです');
+                            handleDrawerClose();
+                        }}>
+                            <ListItemIcon>
+                                <InfoIcon style={{ color: isDarkMode ? '#fff' : '#222' }} />
+                            </ListItemIcon>
+                            <ListItemText primary="アプリについて" />
+                        </ListItem>
+                    </List>
+                </div>
+            </Drawer>
 
             <div style={{ display: "flex", alignItems: "flex-start" }}>
                 <div style={{ margin: "24px 0 0 24px", display: "flex", alignItems: "center", gap: "12px" }}>
