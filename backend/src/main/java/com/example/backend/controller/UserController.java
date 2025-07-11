@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
 
-
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:3000")
