@@ -348,15 +348,6 @@ const App: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                        ) : showGrid ? (
-                            <div className="container">
-                                <div className="box">
-                                    <div className="header">
-                                        <h2>検索結果</h2>
-                                        <p>該当するユーザーが見つかりませんでした</p>
-                                    </div>
-                                </div>
-                            </div>
                         ) : (
                             <UserManager key={refreshKey} isDarkMode={isDarkMode} />
                         )}
