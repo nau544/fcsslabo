@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SearchIcon from '@mui/icons-material/Search'; // Material-UIの検索アイコンを追加
 
 // 検索結果の型定義
 type SearchResult = {
@@ -93,10 +94,14 @@ const Search: React.FC<SearchProps> = ({ onSearch, isDarkMode = false }) => {
                     padding: '0 20px',
                     borderRadius: '0 4px 4px 0',
                     fontSize: '1.2rem',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
                 }}
             >
-                🔍検索
+                <SearchIcon style={{ fontSize: '1.2rem' }} />
+                検索
             </button>
             <button
                 type="button"

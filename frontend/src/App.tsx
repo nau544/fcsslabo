@@ -3,7 +3,9 @@ import UserManager from "./components/UserManager";
 import SearchHistoryManager from "./components/SearchHistoryManager";
 import "./App.css";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode'; // 太陽マークアイコンを追加
 import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert'; // 三点リーダーアイコンを追加
 import Search from './components/Search';
 import AddButton from "./components/AddButton";
 import Grid from './components/Grid';
@@ -221,9 +223,14 @@ const App: React.FC = () => {
         <div className={`App${isDarkMode ? ' dark' : ''}`}>
             <div className="red-banner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <h1 style={{ margin: 0 }}>ユーザー情報関連ツール</h1>
-                <IconButton onClick={() => setIsDarkMode((prev) => !prev)}>
-                    <DarkModeIcon />
-                </IconButton>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <IconButton>
+                        <MoreVertIcon />
+                    </IconButton>
+                    <IconButton onClick={() => setIsDarkMode((prev) => !prev)}>
+                        {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+                    </IconButton>
+                </div>
             </div>
 
             <div style={{ display: "flex", alignItems: "flex-start" }}>
