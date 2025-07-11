@@ -18,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 名前、メールアドレス、またはIDで検索
     @Query("SELECT u FROM User u WHERE LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR CAST(u.id AS string) LIKE CONCAT('%', :keyword, '%')")
     List<User> findByNameOrEmailOrIdContainingIgnoreCase(@Param("keyword") String keyword);
+
+    List<User> findAllByOrderByIdAsc();
 }
