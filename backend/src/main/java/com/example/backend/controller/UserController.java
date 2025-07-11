@@ -5,10 +5,12 @@ import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -33,8 +35,9 @@ public class UserController {
     // ユーザー追加
     @PostMapping
     public User createUser(@RequestBody User user) {
-        // 作成日時を自動設定
-        user.setCreatedAt(LocalDateTime.now());
+        // JSTで現在時刻を取得
+        ZonedDateTime jstNow = ZonedDateTime.now(ZoneId.of("Asia/Tokyo"));
+        user.setCreatedAt(jstNow.toLocalDateTime());
         return userRepository.save(user);
     }
 

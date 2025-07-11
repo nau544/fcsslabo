@@ -22,10 +22,9 @@
 
 .red-banner {
     background-color: #b71c1c;
-    color: #fff;
-    padding: 16px;
-    border-radius: 8px 8px 0 0;
-    margin-bottom: 16px;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 0; /* 上の丸みを消して角にする */
 }
 
 .red-banner h1 {

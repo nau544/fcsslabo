@@ -5,7 +5,7 @@ import "./App.css";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode'; // 太陽マークアイコンを追加
 import IconButton from '@mui/material/IconButton';
-import MoreVertIcon from '@mui/icons-material/MoreVert'; // 三点リーダーアイコンを追加
+import MenuIcon from '@mui/icons-material/Menu'; // ハンバーガーメニューアイコンを追加
 import Drawer from '@mui/material/Drawer'; // ドロワーコンポーネントを追加
 import List from '@mui/material/List'; // リストコンポーネントを追加
 import ListItem from '@mui/material/ListItem'; // リストアイテムコンポーネントを追加
@@ -241,11 +241,16 @@ const App: React.FC = () => {
 
     return (
         <div className={`App${isDarkMode ? ' dark' : ''}`}>
-            <div className="red-banner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div className="red-banner" style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between',
+                borderRadius: '0' // 上の丸みを消して角にする
+            }}>
                 <h1 style={{ margin: 0 }}>ユーザー情報管理ツール</h1>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <IconButton onClick={handleDrawerOpen}>
-                        <MoreVertIcon />
+                        <MenuIcon />
                     </IconButton>
                     <IconButton onClick={() => setIsDarkMode((prev) => !prev)}>
                         {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
