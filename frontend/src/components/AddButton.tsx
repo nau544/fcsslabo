@@ -43,6 +43,14 @@ const AddButton: React.FC<AddButtonProps> = ({ onUserAdd, isDarkMode = false }) 
     handleClose();
   };
 
+  // エンターキーでの保存処理
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSave();
+    }
+  };
+
   return (
     <>
       <button
@@ -103,6 +111,7 @@ const AddButton: React.FC<AddButtonProps> = ({ onUserAdd, isDarkMode = false }) 
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
+                onKeyPress={handleKeyPress}
                 style={{ 
                   width: "100%", 
                   marginTop: "4px", 
@@ -125,6 +134,7 @@ const AddButton: React.FC<AddButtonProps> = ({ onUserAdd, isDarkMode = false }) 
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
+                onKeyPress={handleKeyPress}
                 style={{ 
                   width: "100%", 
                   marginTop: "4px", 
