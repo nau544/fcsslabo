@@ -19,6 +19,7 @@ import Search from './components/Search';
 import AddButton from "./components/AddButton";
 import Grid from './components/Grid';
 import DownloadButton from "./components/DownloadButton";
+import UpdateIcon from '@mui/icons-material/Update';
 
 
 // 検索結果の型定義
@@ -292,13 +293,13 @@ const App: React.FC = () => {
                             <ListItemText primary="ホーム" />
                         </ListItem>
                         <ListItem button onClick={() => {
-                            alert('お知らせ機能は開発中です');
+                            alert('更新情報機能は開発中です');
                             handleDrawerClose();
                         }}>
                             <ListItemIcon>
-                                <NotificationsIcon style={{ color: isDarkMode ? '#fff' : '#222' }} />
+                                <UpdateIcon style={{ color: isDarkMode ? '#fff' : '#222' }} />
                             </ListItemIcon>
-                            <ListItemText primary="お知らせ" />
+                            <ListItemText primary="更新情報" />
                         </ListItem>
                         <ListItem button onClick={() => {
                             alert('設定機能は開発中です');
