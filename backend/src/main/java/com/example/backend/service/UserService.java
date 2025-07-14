@@ -14,4 +14,9 @@ public class UserService {
     public List<User> getAllUsers() {
         return userRepository.findAllByOrderByIdAsc();
     }
+
+    // 選択されたユーザーIDのリストからユーザー情報を取得
+    public List<User> getUsersByIds(List<Long> userIds) {
+        return userRepository.findAllById(userIds);
+    }
 }
