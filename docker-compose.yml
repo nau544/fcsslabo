@@ -21,7 +21,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydb
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/new_db_name
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=adminpass
     depends_on:
@@ -33,11 +33,12 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpass
-      POSTGRES_DB: mydb
+      POSTGRES_DB: new_db_name
     ports:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
 
   pgadmin:
     image: dpage/pgadmin4
