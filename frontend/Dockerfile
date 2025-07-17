@@ -13,13 +13,10 @@ RUN apk update && apk add --no-cache \
 COPY package*.json ./
 
 # 依存関係をインストール
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci
 
 # Copy source code
 COPY . .
-
-# 開発用の依存関係もインストール（TypeScriptコンパイル用）
-RUN npm install --only=dev
 
 EXPOSE 3000
 
