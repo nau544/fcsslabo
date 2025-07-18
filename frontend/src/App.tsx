@@ -20,16 +20,8 @@ import AddButton from "./components/AddButton";
 import Grid from './components/Grid';
 import DownloadButton from "./components/DownloadButton";
 import UpdateIcon from '@mui/icons-material/Update';
+import { UserWithMaster } from './types/UserWithMaster';
 
-
-// 検索結果の型定義
-type SearchResult = {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-    createdAt?: string;
-};
 
 // カラム定義の型
 type ColumnDefinition = {
@@ -40,12 +32,22 @@ type ColumnDefinition = {
     type: string;
 };
 
+// userWithMasterColumnsをuseStateの前に宣言
+const userWithMasterColumns: ColumnDefinition[] = [
+    { field: 'id', headerName: 'ID', width: '8%', editable: false, type: 'number' },
+    { field: 'username', headerName: 'ユーザー名', width: '18%', editable: true, type: 'text' },
+    { field: 'email', headerName: 'メールアドレス', width: '24%', editable: true, type: 'email' },
+    { field: 'genderName', headerName: '性別', width: '14%', editable: false, type: 'text' },
+    { field: 'departmentName', headerName: '部署', width: '18%', editable: false, type: 'text' },
+    { field: 'createdAt', headerName: '作成日時', width: '18%', editable: false, type: 'datetime' },
+];
+
 const App: React.FC = () => {
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const [drawerOpen, setDrawerOpen] = React.useState(false); // ドロワーの開閉状態を管理
     const [showGrid, setShowGrid] = React.useState(false);
     const [refreshKey, setRefreshKey] = React.useState(0);
-    const [searchResults, setSearchResults] = React.useState<SearchResult[]>([]); // 検索結果を管理
+    const [searchResults, setSearchResults] = React.useState<UserWithMaster[]>([]); // 検索結果を管理
     const [tableColumns, setTableColumns] = React.useState<ColumnDefinition[]>([]); // テーブル構造を管理
 
     // 編集用state
@@ -75,9 +77,9 @@ const App: React.FC = () => {
         }
     }, [isDarkMode]);
 
-    // 初期化時にテーブル構造を取得
+    // 初期化時にカラム定義をセット
     React.useEffect(() => {
-        fetchTableStructure();
+        setTableColumns(userWithMasterColumns);
     }, []);
 
     // ユーザー追加API
@@ -101,7 +103,7 @@ const App: React.FC = () => {
     };
 
     // 検索結果を受け取る関数
-    const handleSearch = (results: SearchResult[]) => {
+    const handleSearch = (results: UserWithMaster[]) => {
         // ID順にソートしてから設定
         const sortedResults = results.sort((a, b) => a.id - b.id);
         setSearchResults(sortedResults);
@@ -113,6 +115,8 @@ const App: React.FC = () => {
         id: result.id,
         username: result.username,
         email: result.email,
+        genderName: result.genderName,
+        departmentName: result.departmentName,
         createdAt: result.createdAt
     }));
 

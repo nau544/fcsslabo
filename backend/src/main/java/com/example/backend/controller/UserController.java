@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
+import com.example.backend.dto.UserWithMasterDto;
+import com.example.backend.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
@@ -21,6 +23,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     // テーブル構造のメタデータを取得するAPI
     @GetMapping("/table-structure")
@@ -76,6 +81,11 @@ public class UserController {
             // キーワードが指定されていない場合は全件取得
             return userRepository.findAll();
         }
+    }
+
+    @GetMapping("/with-master")
+    public List<UserWithMasterDto> getUsersWithMaster(@RequestParam(required = false) String keyword) {
+        return userService.getUsersWithMaster(keyword);
     }
 
     // ユーザー追加

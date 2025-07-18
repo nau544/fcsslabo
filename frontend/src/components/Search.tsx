@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search'; // Material-UIの検索アイコンを追加
+import { UserWithMaster } from '../types/UserWithMaster';
 
 // 検索結果の型定義
-type SearchResult = {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-};
+// type SearchResult = {
+//     id: number;
+//     name: string;
+//     username: string;
+//     email: string;
+// };
 
 type SearchProps = {
-    onSearch: (results: SearchResult[]) => void; // 検索結果を親に渡す
+    onSearch: (results: UserWithMaster[]) => void; // 検索結果を親に渡す
     isDarkMode?: boolean; // ダークモード用プロパティを追加
 };
 
@@ -20,7 +21,7 @@ const Search: React.FC<SearchProps> = ({ onSearch, isDarkMode = false }) => {
     // 検索処理を実行する関数
     const handleSearch = async () => {
         try {
-            let url = 'http://localhost:8081/api/users';
+            let url = 'http://localhost:8081/api/users/with-master';
             
             // キーワードが入力されている場合は検索APIを呼び出し
             if (keyword.trim()) {

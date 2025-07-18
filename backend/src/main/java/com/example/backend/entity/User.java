@@ -30,6 +30,12 @@ public class User {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "gender_id")
+    private Long genderId;
+
+    @Column(name = "department_id")
+    private Long departmentId;
+
     // getter, setter
     public Long getId() {
         return id;
@@ -70,4 +76,9 @@ public class User {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public Long getGenderId() { return genderId; }
+    public void setGenderId(Long genderId) { this.genderId = genderId; }
+    public Long getDepartmentId() { return departmentId; }
+    public void setDepartmentId(Long departmentId) { this.departmentId = departmentId; }
 }
