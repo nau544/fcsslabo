@@ -68,7 +68,7 @@ public class UserExcelDownloadController {
             try (ServletOutputStream os = response.getOutputStream()) {
                 workbook.write(os);
             }
-        }
+        } // ← ここにメソッドの閉じカッコを追加
     }
 
     // 選択されたユーザーのみをダウンロードするエンドポイント
