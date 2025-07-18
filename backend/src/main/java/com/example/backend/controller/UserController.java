@@ -37,7 +37,7 @@ public class UserController {
                 "type", "number"
             ),
             Map.of(
-                "field", "name",
+                "field", "username",
                 "headerName", "名前",
                 "width", "25%",
                 "editable", true,
@@ -70,8 +70,8 @@ public class UserController {
     @GetMapping
     public List<User> getUsers(@RequestParam(required = false) String keyword) {
         if (keyword != null && !keyword.trim().isEmpty()) {
-            // キーワードが指定されている場合は名前、メールアドレス、IDの全てで検索
-            return userRepository.findByNameOrEmailOrIdContainingIgnoreCase(keyword.trim());
+            // キーワードが指定されている場合はユーザー名、メールアドレス、IDの全てで検索
+            return userRepository.findByUsernameOrEmailOrIdContainingIgnoreCase(keyword.trim());
         } else {
             // キーワードが指定されていない場合は全件取得
             return userRepository.findAll();
@@ -92,7 +92,7 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable Long id, @Valid @RequestBody User updatedUser) {
         return userRepository.findById(id)
             .map(user -> {
-                user.setName(updatedUser.getName());
+                user.setUsername(updatedUser.getUsername());
                 user.setEmail(updatedUser.getEmail());
                 // 必要に応じて他のフィールドも更新
                 User saved = userRepository.save(user);

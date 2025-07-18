@@ -26,6 +26,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 type SearchResult = {
     id: number;
     name: string;
+    username: string;
     email: string;
     createdAt?: string;
 };
@@ -110,7 +111,7 @@ const App: React.FC = () => {
     // Grid用データに変換（ID順にソート済み）
     const gridData = searchResults.map(result => ({
         id: result.id,
-        name: result.name,
+        username: result.username,
         email: result.email,
         createdAt: result.createdAt
     }));
@@ -118,14 +119,14 @@ const App: React.FC = () => {
     // 編集ボタン押下時
     const handleEdit = (row: any) => {
         setEditTarget(row);
-        setEditName(row.name);
+        setEditName(row.username);
         setEditValue(row.email);
     };
 
     // 削除ボタン押下時
     const handleDelete = async (row: any) => {
         // 削除確認ダイアログ
-        if (!confirm(`ユーザー「${row.name}」を削除しますか？`)) {
+        if (!confirm(`ユーザー「${row.username}」を削除しますか？`)) {
             return;
         }
 
@@ -173,7 +174,7 @@ const App: React.FC = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     id: editTarget.id,
-                    name: editName,
+                    username: editName,
                     email: editValue
                 }),
             });
@@ -184,7 +185,7 @@ const App: React.FC = () => {
                 setSearchResults(results =>
                     results.map(r =>
                         r.id === updatedUser.id
-                            ? { ...r, name: updatedUser.name, email: updatedUser.email }
+                            ? { ...r, username: updatedUser.username, email: updatedUser.email }
                             : r
                     ).sort((a, b) => a.id - b.id)
                 );

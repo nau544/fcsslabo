@@ -5,6 +5,7 @@ import SearchIcon from '@mui/icons-material/Search'; // Material-UIの検索ア�
 type SearchResult = {
     id: number;
     name: string;
+    username: string;
     email: string;
 };
 

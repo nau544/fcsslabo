@@ -17,6 +17,11 @@ public class User {
     @Size(max = 50, message = "名前は50文字以内で入力してください")
     private String name;
 
+    @NotBlank(message = "ユーザー名は必須です")
+    @Size(max = 50, message = "ユーザー名は50文字以内で入力してください")
+    @Column(name = "username")
+    private String username;
+
     @NotBlank(message = "メールアドレスは必須です")
     @Email(message = "メールアドレスの形式が正しくありません")
     @Size(max = 100, message = "メールアドレスは100文字以内で入力してください")
@@ -40,6 +45,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
