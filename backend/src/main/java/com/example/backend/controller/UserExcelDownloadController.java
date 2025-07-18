@@ -58,7 +58,7 @@ public class UserExcelDownloadController {
                 XSSFCell cell4 = row.getCell(4) != null ? row.getCell(4) : row.createCell(4);
 
                 cell1.setCellValue(user.getId()); // user.getId()がLong型やint型の場合
-                cell2.setCellValue(user.getName());
+                cell2.setCellValue(user.getUsername());
                 cell3.setCellValue(user.getEmail());
                 cell4.setCellValue(user.getCreatedAt().toString());
             }
@@ -120,7 +120,7 @@ public class UserExcelDownloadController {
                 XSSFCell cell4 = row.getCell(4) != null ? row.getCell(4) : row.createCell(4);
 
                 cell1.setCellValue(user.getId());
-                cell2.setCellValue(user.getName());
+                cell2.setCellValue(user.getUsername());
                 cell3.setCellValue(user.getEmail());
                 cell4.setCellValue(user.getCreatedAt().toString());
             }
