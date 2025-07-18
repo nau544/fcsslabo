@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Arrays;
 import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
 import java.time.ZonedDateTime;
@@ -18,6 +21,50 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    // テーブル構造のメタデータを取得するAPI
+    @GetMapping("/table-structure")
+    public Map<String, Object> getTableStructure() {
+        Map<String, Object> structure = new HashMap<>();
+        
+        // カラム定義
+        List<Map<String, Object>> columns = Arrays.asList(
+            Map.of(
+                "field", "id",
+                "headerName", "ID",
+                "width", "10%",
+                "editable", false,
+                "type", "number"
+            ),
+            Map.of(
+                "field", "name",
+                "headerName", "名前",
+                "width", "25%",
+                "editable", true,
+                "type", "text"
+            ),
+            Map.of(
+                "field", "email",
+                "headerName", "メールアドレス",
+                "width", "35%",
+                "editable", true,
+                "type", "email"
+            ),
+            Map.of(
+                "field", "createdAt",
+                "headerName", "作成日時",
+                "width", "20%",
+                "editable", false,
+                "type", "datetime"
+            )
+        );
+        
+        structure.put("columns", columns);
+        structure.put("tableName", "userstable");
+        structure.put("primaryKey", "id");
+        
+        return structure;
+    }
 
     // ユーザー一覧取得（検索機能付き）
     @GetMapping

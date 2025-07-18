@@ -1,10 +1,26 @@
 import React from 'react';
 
+// カラム定義の型
+type ColumnDefinition = {
+    field: string;
+    headerName: string;
+    width: string;
+    editable: boolean;
+    type: string;
+};
+
+// データ行の型（動的）
+type DataRow = {
+    id: number;
+    [key: string]: any;
+};
+
 type GridProps = {
-    data: { id: number; name: string; value: string }[];
+    data: DataRow[];
+    columns: ColumnDefinition[];
     isDarkMode: boolean;
-    onEdit?: (row: { id: number; name: string; value: string }) => void;
-    onDelete?: (row: { id: number; name: string; value: string }) => void;
+    onEdit?: (row: DataRow) => void;
+    onDelete?: (row: DataRow) => void;
     selectedUserIds: number[];
     onCheckboxChange: (userId: number) => void;
     onCheckAll: () => void;
@@ -13,6 +29,7 @@ type GridProps = {
 
 const Grid: React.FC<GridProps> = ({
     data,
+    columns,
     isDarkMode,
     onEdit,
     onDelete,
@@ -21,6 +38,24 @@ const Grid: React.FC<GridProps> = ({
     onCheckAll,
     isAllChecked,
 }) => {
+    // データの値を取得する関数
+    const getCellValue = (row: DataRow, field: string) => {
+        const value = row[field];
+        if (value === null || value === undefined) return '';
+        
+        // 日時型の場合はフォーマット
+        if (typeof value === 'string' && value.includes('T')) {
+            try {
+                const date = new Date(value);
+                return date.toLocaleString('ja-JP');
+            } catch {
+                return value;
+            }
+        }
+        
+        return String(value);
+    };
+
     return (
         <div style={{ width: '100%', borderRadius: '12px', background: isDarkMode ? '#333' : '#fff', color: isDarkMode ? '#fff' : '#222', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
             {/* ヘッダー用テーブル */}
@@ -30,9 +65,11 @@ const Grid: React.FC<GridProps> = ({
                         <th style={{ width: '40px', padding: '8px', textAlign: 'center' }}>
                             <input type="checkbox" checked={isAllChecked} onChange={onCheckAll} />
                         </th>
-                        <th style={{ width: '10%', padding: '8px' }}>ID</th>
-                        <th style={{ width: '25%', padding: '8px' }}>名前</th>
-                        <th style={{ width: '35%', padding: '8px' }}>メールアドレス</th>
+                        {columns.map((column, index) => (
+                            <th key={column.field} style={{ width: column.width, padding: '8px' }}>
+                                {column.headerName}
+                            </th>
+                        ))}
                         <th style={{ width: '20%', padding: '8px' }}>アクティブ</th>
                     </tr>
                 </thead>
@@ -57,9 +94,11 @@ const Grid: React.FC<GridProps> = ({
                                 <td style={{ width: '40px', padding: '8px', textAlign: 'center' }}>
                                     <input type="checkbox" checked={selectedUserIds.includes(row.id)} onChange={() => onCheckboxChange(row.id)} />
                                 </td>
-                                <td style={{ width: '10%', padding: '8px' }}>{row.id}</td>
-                                <td style={{ width: '25%', padding: '8px' }}>{row.name}</td>
-                                <td style={{ width: '35%', padding: '8px' }}>{row.value}</td>
+                                {columns.map((column) => (
+                                    <td key={column.field} style={{ width: column.width, padding: '8px' }}>
+                                        {getCellValue(row, column.field)}
+                                    </td>
+                                ))}
                                 <td style={{ width: '20%', padding: '8px' }}>
                                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'space-between' }}>
                                         <button

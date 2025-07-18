@@ -27,6 +27,16 @@ type SearchResult = {
     id: number;
     name: string;
     email: string;
+    createdAt?: string;
+};
+
+// カラム定義の型
+type ColumnDefinition = {
+    field: string;
+    headerName: string;
+    width: string;
+    editable: boolean;
+    type: string;
 };
 
 const App: React.FC = () => {
@@ -35,6 +45,7 @@ const App: React.FC = () => {
     const [showGrid, setShowGrid] = React.useState(false);
     const [refreshKey, setRefreshKey] = React.useState(0);
     const [searchResults, setSearchResults] = React.useState<SearchResult[]>([]); // 検索結果を管理
+    const [tableColumns, setTableColumns] = React.useState<ColumnDefinition[]>([]); // テーブル構造を管理
 
     // 編集用state
     const [editTarget, setEditTarget] = useState<{ id: number; name: string; value: string } | null>(null);
@@ -62,6 +73,11 @@ const App: React.FC = () => {
             document.documentElement.classList.remove('dark');
         }
     }, [isDarkMode]);
+
+    // 初期化時にテーブル構造を取得
+    React.useEffect(() => {
+        fetchTableStructure();
+    }, []);
 
     // ユーザー追加API
     const handleUserAdd = async (user: { name: string; email: string }) => {
@@ -95,18 +111,19 @@ const App: React.FC = () => {
     const gridData = searchResults.map(result => ({
         id: result.id,
         name: result.name,
-        value: result.email
+        email: result.email,
+        createdAt: result.createdAt
     }));
 
     // 編集ボタン押下時
-    const handleEdit = (row: { id: number; name: string; value: string }) => {
+    const handleEdit = (row: any) => {
         setEditTarget(row);
         setEditName(row.name);
-        setEditValue(row.value);
+        setEditValue(row.email);
     };
 
     // 削除ボタン押下時
-    const handleDelete = async (row: { id: number; name: string; value: string }) => {
+    const handleDelete = async (row: any) => {
         // 削除確認ダイアログ
         if (!confirm(`ユーザー「${row.name}」を削除しますか？`)) {
             return;
@@ -214,6 +231,19 @@ const App: React.FC = () => {
 
     // 全選択状態判定
     const isAllChecked = searchResults.length > 0 && selectedUserIds.length === searchResults.length;
+
+    // テーブル構造を取得する関数
+    const fetchTableStructure = async () => {
+        try {
+            const res = await fetch("http://localhost:8081/api/users/table-structure");
+            if (res.ok) {
+                const structure = await res.json();
+                setTableColumns(structure.columns);
+            }
+        } catch (err) {
+            console.error("テーブル構造の取得に失敗しました:", err);
+        }
+    };
 
     const fetchAllUsers = async () => {
       try {
@@ -339,6 +369,7 @@ const App: React.FC = () => {
                                 <div className="box">
                                     <Grid
                                         data={gridData}
+                                        columns={tableColumns}
                                         isDarkMode={isDarkMode}
                                         onEdit={handleEdit}
                                         onDelete={handleDelete}

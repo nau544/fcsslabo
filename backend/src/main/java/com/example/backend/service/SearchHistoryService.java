@@ -5,6 +5,8 @@ import com.example.backend.repository.SearchHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SearchHistoryService {
     @Autowired
@@ -13,5 +15,9 @@ public class SearchHistoryService {
     public SearchHistory save(String keyword) {
         SearchHistory history = new SearchHistory(keyword, java.time.LocalDateTime.now());
         return repository.save(history);
+    }
+
+    public List<SearchHistory> getAllSearchHistory() {
+        return repository.findAll();
     }
 }
